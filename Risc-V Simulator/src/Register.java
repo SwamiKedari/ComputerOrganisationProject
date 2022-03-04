@@ -4,6 +4,7 @@ import java.util.HashMap;
 public class Register {
 
     public int []R = new int[32];
+    public int []MEM = new int[1024];
 
      //Instructions that are supported
     /*
@@ -63,7 +64,7 @@ public class Register {
 
         // Determining the type of instruction 
         int Itype = FetchInstruction(s);
-
+        
         // Removing first word from instruction
         // so that instruction will now contain register and immi value
         int j = s.indexOf(' ');
@@ -105,6 +106,38 @@ public class Register {
                 }
             }
         }
+        else if(Itype==5 || Itype==6)
+        {
+            String []reg = new String[3];
+            s = s.replaceAll("\\s", "");
+            reg = s.split(",");
+            int n = Integer.parseInt(reg[0].substring(1));
+            //System.out.println(n);
+            r.add(n);
+            int i;
+            String r1 = "";
+            String r2 = "";
+            for(i=0; i<reg[1].length(); i++)
+            {
+                if(reg[1].charAt(i) == '(' ){
+                    break;
+                }
+                r1 = r1 + reg[1].charAt(i);
+            }
+            n = Integer.parseInt(r1);
+            //System.out.println(n);
+            r.add(n);
+            for(int k=i+1; k<reg[1].length(); k++)
+            {
+                if(reg[1].charAt(k) == ')' ){
+                    break;
+                }
+                r2 = r2 + reg[1].charAt(k);
+            }
+            n = Integer.parseInt(r2.substring(1));
+            //System.out.println(n);
+            r.add(n);
+        }
         else if(Itype==7)
         {
             String []reg = new String[2];
@@ -115,7 +148,7 @@ public class Register {
             n = Integer.parseInt(reg[1]);
             r.add(n);
         }
-        else if(Itype==8)
+        else if(Itype==8 || Itype==9)
         {
             String []reg = new String[3];
             s = s.replaceAll("\\s", "");
@@ -125,7 +158,14 @@ public class Register {
                 int n = Integer.parseInt(reg[i].substring(1));
                 r.add(n);
             }
-            r.add();
+            int n = parser.Labels.get(reg[2]);
+            r.add(n);
+        }
+        else if(Itype==10)
+        {
+            s = s.replaceAll("\\s", "");
+            int n = parser.Labels.get(s);
+            r.add(n);
         }
         return r;
     }
@@ -136,56 +176,76 @@ public class Register {
         if(Itype==1)
         {
             R[r.get(0)] = R[r.get(1)] + R[r.get(2)];
-            System.out.println("Program Counter : " + parser.PC);
             parser.PC++;
+            System.out.println("Program Counter : " + parser.PC);
         }
         else if(Itype==2)
         {
             R[r.get(0)] = R[r.get(1)] - R[r.get(2)];
-            System.out.println("Program Counter : " + parser.PC);
             parser.PC++;
+            System.out.println("Program Counter : " + parser.PC);
         }
         else if(Itype==3)
         {
             int n = r.get(2);
             R[r.get(0)] = R[r.get(1)] + n;
-            System.out.println("Program Counter : " + parser.PC);
             parser.PC++;
+            System.out.println("Program Counter : " + parser.PC);
         }
         else if(Itype==4)
         {
             int n = r.get(2);
             R[r.get(0)] = R[r.get(1)] - n;
-            System.out.println("Program Counter : " + parser.PC);
             parser.PC++;
+            System.out.println("Program Counter : " + parser.PC);
+        }
+        else if(Itype==5)
+        {
+            R[r.get(0)] = MEM[r.get(1)+R[r.get(2)]];
+            parser.PC++;
+            System.out.println("Program Counter : " + parser.PC);
+        }
+        else if(Itype==6)
+        {
+            MEM[r.get(1)+R[r.get(2)]] = R[r.get(0)];
+            parser.PC++;
+            System.out.println("Program Counter : " + parser.PC);
         }
         else if(Itype==7)
         {
             R[r.get(0)] = r.get(1);
-            System.out.println("Program Counter : " + parser.PC);
             parser.PC++;
+            System.out.println("Program Counter : " + parser.PC);
         }
         else if(Itype==8)
         {
             if(R[r.get(0)] != R[r.get(1)]){
-                parser.PC = r.get(2);
+                parser.PC++;
+                System.out.println("Program Counter : " + parser.PC);
+                parser.PC = r.get(2)-1;
             }
             else{
                 parser.PC++;
+                System.out.println("Program Counter : " + parser.PC);
             }
         }
         else if(Itype==9)
         {
             if(R[r.get(0)] == R[r.get(1)]){
-                parser.PC = r.get(2);
+                parser.PC++;
+                System.out.println("Program Counter : " + parser.PC);
+                parser.PC = r.get(2)-1;
             }
             else{
                 parser.PC++;
+                System.out.println("Program Counter : " + parser.PC);
             }
         }
         else if(Itype==10)
         {
-            parser.PC = r.get(0);
+            parser.PC++;
+            System.out.println("Program Counter : " + parser.PC);
+            parser.PC = r.get(0)-1;
         }
     }
 
@@ -197,6 +257,13 @@ public class Register {
             if(R[i]!=0)
             {
                 System.out.println("R["+i+"] = " + R[i]);
+            }
+        }
+        for(int i=0; i<1024; i++)
+        {
+            if(MEM[i]!=0)
+            {
+                System.out.println("MEM["+i+"] = " + MEM[i]);
             }
         }
     }

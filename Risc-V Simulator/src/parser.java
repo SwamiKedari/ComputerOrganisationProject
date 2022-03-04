@@ -5,8 +5,8 @@ import java.util.*;
 public class parser {
 
     public ArrayList<String> Instructions = new ArrayList<String>();
-    HashMap <String,Integer> Labels = new HashMap<>();
-    public static int PC = 1;
+    public static HashMap <String,Integer> Labels = new HashMap<>();
+    public static int PC = 0;
     
     public void parsing(File file) throws FileNotFoundException
     {
@@ -20,6 +20,7 @@ public class parser {
             String s = Readfile.nextLine();
             s = s.trim();       // Removing all leading and trailing spaces
 
+            // Removing comment from instruction line
             for(int i=0; i<s.length(); i++)
             {
                 if(s.charAt(i) == '#'){
@@ -33,9 +34,10 @@ public class parser {
             }
             else{
                 count++;
-                String []label = s.split(":");
-                if(label[0].equals(""))
-                Labels.put(label[0],PC);
+                if(s.charAt(s.length()-1) == ':')
+                {
+                    Labels.put(s.substring(0,s.length()-1),count+1);
+                }
                 // Storing all Tnstructions in arraylist 
                 // Otherthan empty lines and comments
                 Instructions.add(s);

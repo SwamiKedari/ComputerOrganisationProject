@@ -1,10 +1,15 @@
-li x0, 10
+li x0, 4
 li x1, 20
-bne s1, s2, loop
-sub x4, x0, x1
-add x2, x0, x1 
-loop:  
-    sub x3, x0, x1
-addi x4,x2,20
+Add: 
+    add x0, x1, x16
+beq x0, x1, loop
+sub x2, x0, x1
+loop:
+    add x10, x0, x1
+j loop2
+addi x5,x5,34
+li x8, 10
+loop2:
+    li x6, 20
 subi x5,x1,10
 

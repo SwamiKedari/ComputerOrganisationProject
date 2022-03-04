@@ -7,22 +7,30 @@ public class simulator {
     public static void main(String[] args) throws Exception {
     
         parser scan = new parser();
-        scan.parsing(new File("test.txt"));
+        scan.parsing(new File("test1.txt"));
         ArrayList<String> Instruction = scan.Instructions;
 
         Register reg = new Register();
 
-        for(int i=0; i<Instruction.size(); i++)
+        System.out.println(parser.Labels);
+        System.out.println(Instruction.size());
+
+        while(parser.PC < Instruction.size())
         {
-            
+            if(Instruction.get(parser.PC).charAt(Instruction.get(parser.PC).length()-1) == ':'){
+                parser.PC++;
+                System.out.println("Program Counter: "+parser.PC);
+                System.out.println();
+                continue;
+            }
             // Printing each instruction
-            System.out.println(Instruction.get(i));
+            System.out.println(Instruction.get(parser.PC));
 
             // Fetching register type
-            int Itype = reg.FetchInstruction(Instruction.get(i));  
+            int Itype = reg.FetchInstruction(Instruction.get(parser.PC));  
 
             // Fetching all registers
-            ArrayList<Integer> r = reg.FetchRegister(Instruction.get(i));
+            ArrayList<Integer> r = reg.FetchRegister(Instruction.get(parser.PC));
 
             // Evaluating the instruction
             reg.Evaluate(r, Itype);
@@ -32,6 +40,69 @@ public class simulator {
 
             System.out.println();
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        // for(int i=0; i<Instruction.size(); i++)
+        // {
+        //     if(Instruction.get(i).charAt(Instruction.get(i).length()-1) == ':'){
+        //         continue;
+        //     }
+        //     // Printing each instruction
+        //     System.out.println(Instruction.get(i));
+
+        //     // Fetching register type
+        //     int Itype = reg.FetchInstruction(Instruction.get(i));  
+
+        //     // Fetching all registers
+        //     ArrayList<Integer> r = reg.FetchRegister(Instruction.get(i));
+
+        //     // Evaluating the instruction
+        //     reg.Evaluate(r, Itype);
+
+        //     // printing the value of registers
+        //     reg.print();
+
+        //     System.out.println();
+        // }
     }
 }
 // Declaring Register array
