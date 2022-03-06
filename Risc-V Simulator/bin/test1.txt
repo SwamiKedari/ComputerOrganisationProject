@@ -1,13 +1,17 @@
-li x0, 10
-la x1, 20
-li x2, 40
-sw x2, 4(x2)
-lw x5, 4(x2)
-addi x3,x2,10
-sub x4, x0, x1
-bne x0, x1, loop1
-add x2, x0, x1 
+.data
+
+_start:
+li x5, 10
+li x7, 20
+sw x7, 4(x7)
+lw x5, 0(x7)
+addi x3,x7,10
+jr ra
+beq x5, x6, loop1
+sub x4, x5, x6
+j loop2
+add x7, x5, x6 
 loop1:  
-    sub x3, x0, x1
-subi x5,x1,10
+    sub x28, x5, x6
+subi x5,x6,10
 
