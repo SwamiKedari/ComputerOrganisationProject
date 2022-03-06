@@ -2,6 +2,8 @@ import java.io.File;                    // Import the File class
 import java.io.FileNotFoundException;   // Import this class to handle errors
 import java.util.*;                     //Import all the utilities classes
 
+
+// This is simulator
 public class simulator {
 
     public static void main(String[] args) throws Exception {
