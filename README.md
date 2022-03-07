@@ -17,5 +17,7 @@ The Project consists of 3 java classes :
   It also removes the comments and blank lines in the program .
   This project only support single line comments .
   
-  As of now , we have not worked on multiline comments , taking user Input in the program , and storing strings in the memory .
+ # 4)Other things to do :
+ As of now , we have not worked on multiline comments , taking user Input in the program , and storing strings in the memory .
+ Also , we want to make user interface for this project .
   
