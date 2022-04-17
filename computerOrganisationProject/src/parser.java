@@ -5,6 +5,11 @@ import java.util.*;
 public class parser {
 
     public ArrayList<String> Instructions = new ArrayList<String>();
+    public void printInstructions(ArrayList<String> a){
+        for(int i=0;i<Instructions.size();i++){
+            System.out.println(a.get(i));
+        }
+    }
     public static HashMap <String,Integer> Labels = new HashMap<>();
     public ArrayList<String> upperInstructions = new ArrayList<>();
     public static int PC = 0;
@@ -113,9 +118,10 @@ public class parser {
                     Labels.put(s.substring(0,s.length()-1),count+1);
                 }
 
-                // Storing all Tnstructions in arraylist
-                // Otherthan empty lines and comments
+                // Storing all Instructions in arraylist
+                // Other than empty lines and comments
                 Instructions.add(s);
+                //System.out.println(s);
             }
         }
     }

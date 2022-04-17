@@ -30,6 +30,9 @@ public class Register {
     public int []MEM = new int[1024];
     public HashMap<String,Integer> memory = new HashMap<>();
     public int memoryPointer=0;
+    public ArrayList<ArrayList<Integer>> registerForPipelining=new ArrayList<>();
+    public ArrayList<ArrayList<String>> instructionsForPipelining=new ArrayList<>();
+    //public ArrayList<Integer> onlyRegisters =new ArrayList<>();
 
     //e.g., Array3: .byte 45, 65, -201, 57
     public void breakMemoryInstruction(String a) {
@@ -172,6 +175,7 @@ public class Register {
     public ArrayList<Integer> FetchRegister(String s)
     {
         ArrayList<Integer> r = new ArrayList<Integer>();
+        ArrayList<Integer> ir=new ArrayList<Integer>();
 
         // Empty array list for handling errors
         ArrayList<Integer> r0 = new ArrayList<Integer>();
@@ -186,6 +190,7 @@ public class Register {
             System.err.println("This instruction is not supported. ");
             return r0;
         }
+        ir.add(Itype);
 
         // Removing first word from instruction
         // so that instruction will now contain register and immi value
@@ -195,7 +200,7 @@ public class Register {
 
         // Depending on the type of instruction ArrayList contains data
         //e.g for add x0,x1,x2
-        // arraylist will have value 0,1,2 i.e., all are regiater numbers
+        // arraylist will have value 0,1,2 i.e., all are register numbers
         //e.g for li x0, 10  i.e, 1st no. is register no. 2nd is imm value
         // array will have value 0, 10
         if(Itype <= 2)
@@ -225,6 +230,7 @@ public class Register {
                     return r0;
                 }
                 r.add(n);
+                ir.add(n);
             }
         }
         else if(Itype==3 || Itype==4)
@@ -256,12 +262,14 @@ public class Register {
                         return r0;
                     }
                     r.add(n);
+                    ir.add(n);
                 }
                 else
                 {
                     try {
                         int n = Integer.parseInt(reg[i]);
                         r.add(n);
+                        ir.add(n);
                     } catch (NumberFormatException e) {
                         System.err.println("Syntax error at Instruction no: "+ (parser.PC+1));
                         System.err.println("Incorrect immediate value");
@@ -297,6 +305,7 @@ public class Register {
             }
             //System.out.println(n);
             r.add(n);
+            ir.add(n);
             int i;
             String r1 = "";
             String r2 = "";
@@ -311,6 +320,7 @@ public class Register {
             try {
                 n = Integer.parseInt(r1);
                 r.add(n);
+                ir.add(n);
             } catch (Exception e) {
                 System.err.println("Syntax error at Instruction no : "+(parser.PC+1));
                 System.err.println("Invalid offset value.");
@@ -331,6 +341,7 @@ public class Register {
             }
             n = Integer.parseInt(r2.substring(1));
             r.add(n);
+            ir.add(n);
         }
         else if(Itype==7)
         {
@@ -358,10 +369,12 @@ public class Register {
                 return r0;
             }
             r.add(n);
+            ir.add(n);
 
             try {
                 n = Integer.parseInt(reg[1]);
                 r.add(n);
+                ir.add(n);
             } catch (NumberFormatException e) {
                 System.err.println("Syntax error at Instruction no: "+ (parser.PC+1));
                 System.err.println("Incorrect immediate value");
@@ -395,10 +408,12 @@ public class Register {
                     return r0;
                 }
                 r.add(n);
+                ir.add(n);
             }
             try {
                 int n = parser.Labels.get(reg[2]);
                 r.add(n);
+                ir.add(n);
             } catch (Exception e) {
                 System.err.println("Invalid Label at Instruction no : " +(parser.PC+1));
                 return r0;
@@ -410,6 +425,7 @@ public class Register {
             try {
                 int n = parser.Labels.get(s);
                 r.add(n);
+                ir.add(n);
             } catch (Exception e) {
                 System.err.println("Invalid Label at Instruction no : " +(parser.PC+1));
                 return r0;
@@ -448,16 +464,19 @@ public class Register {
                 return r0;
             }
             r.add(n);
+            ir.add(n);
             // n = memory.get(reg[1]);
             // r.add(n);
             try {
                 n = memory.get(reg[1]);
                 r.add(n);
+                ir.add(n);
             } catch (Exception e) {
                 System.err.println("Invalid Label at Instruction no : " +(parser.PC+1));
                 return r0;
             }
         }
+        registerForPipelining.add(ir);
 
         return r;
     }
@@ -606,4 +625,23 @@ public class Register {
         System.out.println("\n");
     }
 
+
+    public void printRegisters(ArrayList<ArrayList<Integer>> a){
+        for(ArrayList<Integer> d : a ){
+            for(int i : d){
+                System.out.print(i+" ");
+            }
+            System.out.println();
+        }
+    }
+
 }
+
+
+
+//store the last 2 instructions
+// if source register is equal to destination register , 2 stall if the line compared was second , 1 stall if the line was first
+// this is for arithmetic
+
+// with pipe line forwarding , then 1 stall for second line , 0 stalls for first line
+//

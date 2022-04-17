@@ -7,9 +7,11 @@ public class simulator {
     public static void main(String[] args) throws Exception {
 
         parser scan = new parser();
-        scan.parsing(new File("./src/test.s"));
+        // You can enter the file name which you want to check
+        scan.parsing(new File("./src/test4.s"));
         ArrayList<String> Instruction = scan.Instructions;
         ArrayList<String> upperInstruction = scan.upperInstructions;
+        scan.printInstructions(Instruction);
 
         Register reg = new Register();
         reg.addToMemory(upperInstruction);
@@ -58,6 +60,27 @@ public class simulator {
         System.out.println();
         System.out.println("Memory and Registers representation at the end: ");
         reg.print();
+
+//        reg.printRegisters(reg.registerForPipelining);
+        //reg.print();
+        pipeLine pp = new pipeLine();
+        int user_in;
+        Scanner s = new Scanner(System.in);
+        System.out.println("Choose any of the below option : \n1.Pipline with forwarding\n2.Pipeline without forwarding");
+        user_in = s.nextInt();
+        if(user_in==1){
+            pp.printPipelineWF(reg.registerForPipelining);
+        }
+        else if (user_in==2) {
+            pp.printPipelineWOF(reg.registerForPipelining);
+        }
+        else{
+            System.err.println("Invalid input\nProgram terminated.");
+        }
     }
+    //create one more while loop for instructions with pipeline stages
+    //instruction stage  cycle index map , update it again
+    //
+
 }
 

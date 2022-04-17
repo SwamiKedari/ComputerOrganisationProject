@@ -9,7 +9,7 @@ _start:
 
 .data
 
-array:      .byte 90, 67, 30 , 1, 45, 50, 11, 33, 67, 19, 2
+array:      .byte 90, 67, 30 , 1, 45, 50, 11, 33, 67, 19, 2, 45, 6 ,3, 12, 9, 2123,20, 23, 8
 
 .text
 
@@ -18,7 +18,7 @@ bubbleSort:
 	la      x5, array
 	li      x6, 0     # i = 0;
 	li      x7, 0      # j = 0;
-	li      x8, 11     # array length
+	li      x8, 20     # array length
 loop:
 	beq     x6, x8, exit       # exit if i == length of array -1
 	la    	x5, array

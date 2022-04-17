@@ -1,3 +1,4 @@
+# This program will show error because it does not start with "_start:"
 .data
 Array: .byte 1, 2, 34
 Array2: .byte 30,45 , 65 , 49 , 65 , 34 , 55 , 202002 ,     56
